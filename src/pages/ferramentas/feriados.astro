@@ -1,0 +1,296 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdPlaceholder from '../../components/AdPlaceholder.astro';
+import { getCalculatedNationalHolidays, MONTH_NAMES } from '../../services/tools/holidays';
+import { buildWebApplicationSchema } from '../../utils/seo';
+
+const breadcrumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Ferramentas', url: '/ferramentas' },
+  { name: 'Calendário de Feriados', url: '/ferramentas/feriados' },
+];
+
+const defaultYear = 2026;
+const holidays2026 = getCalculatedNationalHolidays(defaultYear);
+
+// Group by month
+const holidaysByMonth = MONTH_NAMES.map((monthName, idx) => {
+  const monthNum = idx + 1;
+  const items = holidays2026.filter((h) => h.month === monthNum);
+  return {
+    monthNum,
+    monthName,
+    items,
+  };
+}).filter((group) => group.items.length > 0);
+
+const schema = buildWebApplicationSchema({
+  name: 'Calendário de Feriados Nacionais - ClimaBrasil',
+  description: 'Consulte os feriados nacionais do Brasil por ano com dias da semana e calendário visual.',
+  url: 'https://climabrasil.com.br/ferramentas/feriados',
+  applicationCategory: 'UtilityApplication',
+});
+---
+
+<BaseLayout
+  title="Calendário de Feriados Nacionais do Brasil (2024 - 2028)"
+  description="Consulte todos os feriados nacionais e pontos facultativos do Brasil. Calendário organizado por mês com dias da semana e datas comemorativas oficiais."
+  schema={schema}
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <section class="max-w-4xl mx-auto py-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+      <div>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800 mb-2">
+          Utilidade Pública
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+          Feriados Nacionais do Brasil
+        </h1>
+        <p class="mt-1 text-sm text-slate-600">
+          Calendário oficial com feriados federais, pontos facultativos e datas comemorativas.
+        </p>
+      </div>
+
+      <!-- Seletor de Ano -->
+      <div class="flex items-center gap-2">
+        <label for="year-select" class="text-sm font-semibold text-slate-700 whitespace-nowrap">
+          Ano:
+        </label>
+        <select
+          id="year-select"
+          class="px-4 py-2 bg-white border border-slate-300 rounded-xl text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500 shadow-xs cursor-pointer"
+        >
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026" selected>2026</option>
+          <option value="2027">2027</option>
+          <option value="2028">2028</option>
+        </select>
+      </div>
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="feriados-top" />
+
+    <!-- Container dos Feriados -->
+    <div id="holidays-container" class="my-8 space-y-6">
+      {holidaysByMonth.map((group) => (
+        <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs">
+          <div class="bg-slate-50/80 px-6 py-3 border-b border-slate-200 flex items-center justify-between">
+            <h2 class="text-base font-bold text-slate-900">
+              {group.monthName}
+            </h2>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-slate-200 text-slate-700">
+              {group.items.length} {group.items.length === 1 ? 'feriado' : 'feriados'}
+            </span>
+          </div>
+
+          <div class="divide-y divide-slate-100">
+            {group.items.map((item) => (
+              <div class="p-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/50 transition-colors">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded-xl bg-sky-50 border border-sky-100 text-sky-700 flex flex-col items-center justify-center shrink-0">
+                    <span class="text-xs uppercase font-bold leading-none">{item.monthName.slice(0, 3)}</span>
+                    <span class="text-lg font-black leading-none mt-0.5">{item.day}</span>
+                  </div>
+                  <div>
+                    <h3 class="text-sm sm:text-base font-bold text-slate-900">
+                      {item.name}
+                    </h3>
+                    <p class="text-xs text-slate-500 capitalize">
+                      {item.dayOfWeek}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="sm:text-right">
+                  <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+                    item.type.includes('Facultativo')
+                      ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                      : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                  }`}>
+                    {item.type}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Explicação sobre tipos de feriados -->
+    <section class="mt-10 bg-slate-100/70 rounded-3xl p-6 sm:p-8 text-xs text-slate-600 space-y-3">
+      <h3 class="text-sm font-bold text-slate-900">
+        Informações Legais sobre Feriados no Brasil
+      </h3>
+      <p>
+        <strong>Feriados Nacionais:</strong> Fixados por leis federais (como a Lei nº 10.607/2002 e a Lei nº 14.759/2023, que incluiu o Dia Nacional de Zumbi e da Consciência Negra em 20 de novembro), são obrigatórios para órgãos públicos e empresas privadas em todo o território nacional.
+      </p>
+      <p>
+        <strong>Pontos Facultativos:</strong> Decretados anualmente pelo Governo Federal (como Carnaval e Corpus Christi), valem para o serviço público federal e facultam o funcionamento a critério de empresas privadas e governos estaduais ou municipais.
+      </p>
+      <p class="text-slate-400">
+        Fonte dos dados: Portarias do Ministério da Gestão e da Inovação em Serviços Públicos e BrasilAPI.
+      </p>
+    </section>
+
+    <AdPlaceholder slotType="horizontal" slotId="feriados-bottom" />
+  </section>
+</BaseLayout>
+
+<script>
+  const yearSelect = document.getElementById('year-select') as HTMLSelectElement;
+  const container = document.getElementById('holidays-container')!;
+
+  const MONTH_NAMES = [
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  ];
+
+  function calculateHolidays(year: number) {
+    const fixed = [
+      { month: 1, day: 1, name: 'Confraternização Universal (Ano Novo)' },
+      { month: 4, day: 21, name: 'Tiradentes' },
+      { month: 5, day: 1, name: 'Dia Mundial do Trabalho' },
+      { month: 9, day: 7, name: 'Independência do Brasil' },
+      { month: 10, day: 12, name: 'Nossa Senhora Aparecida (Padroeira do Brasil)' },
+      { month: 11, day: 2, name: 'Finados' },
+      { month: 11, day: 15, name: 'Proclamação da República' },
+      { month: 11, day: 20, name: 'Dia Nacional de Zumbi e da Consciência Negra' },
+      { month: 12, day: 25, name: 'Natal' },
+    ];
+
+    // Algoritmo de Butcher para Páscoa
+    const a = year % 19;
+    const b = Math.floor(year / 100);
+    const c = year % 100;
+    const d = Math.floor(b / 4);
+    const e = b % 4;
+    const f = Math.floor((b + 8) / 25);
+    const g = Math.floor((b - f + 1) / 3);
+    const h = (19 * a + b - d - g + 15) % 30;
+    const i = Math.floor(c / 4);
+    const k = c % 4;
+    const l = (32 + 2 * e + 2 * i - h - k) % 7;
+    const m = Math.floor((a + 11 * h + 22 * l) / 451);
+    const easterMonth = Math.floor((h + l - 7 * m + 114) / 31);
+    const easterDay = ((h + l - 7 * m + 114) % 31) + 1;
+
+    const easterDate = new Date(year, easterMonth - 1, easterDay);
+    const carnivalDate = new Date(easterDate);
+    carnivalDate.setDate(easterDate.getDate() - 47);
+    const goodFridayDate = new Date(easterDate);
+    goodFridayDate.setDate(easterDate.getDate() - 2);
+    const corpusChristiDate = new Date(easterDate);
+    corpusChristiDate.setDate(easterDate.getDate() + 60);
+
+    const dynamic = [
+      { date: carnivalDate, name: 'Carnaval (Ponto Facultativo)' },
+      { date: goodFridayDate, name: 'Sexta-feira Santa (Paixão de Cristo)' },
+      { date: easterDate, name: 'Páscoa' },
+      { date: corpusChristiDate, name: 'Corpus Christi' },
+    ];
+
+    const list: Array<{ date: string; name: string; type: string; day: number; month: number; monthName: string; dayOfWeek: string }> = [];
+
+    for (const hItem of fixed) {
+      const d = new Date(year, hItem.month - 1, hItem.day);
+      const dow = d.toLocaleDateString('pt-BR', { weekday: 'long' });
+      list.push({
+        date: `${year}-${String(hItem.month).padStart(2, '0')}-${String(hItem.day).padStart(2, '0')}`,
+        name: hItem.name,
+        type: 'Feriado Nacional',
+        day: hItem.day,
+        month: hItem.month,
+        monthName: MONTH_NAMES[hItem.month - 1],
+        dayOfWeek: dow.charAt(0).toUpperCase() + dow.slice(1),
+      });
+    }
+
+    for (const dItem of dynamic) {
+      const mo = dItem.date.getMonth() + 1;
+      const da = dItem.date.getDate();
+      const dow = dItem.date.toLocaleDateString('pt-BR', { weekday: 'long' });
+      list.push({
+        date: `${year}-${String(mo).padStart(2, '0')}-${String(da).padStart(2, '0')}`,
+        name: dItem.name,
+        type: dItem.name.includes('Facultativo') ? 'Ponto Facultativo' : 'Feriado Nacional',
+        day: da,
+        month: mo,
+        monthName: MONTH_NAMES[mo - 1],
+        dayOfWeek: dow.charAt(0).toUpperCase() + dow.slice(1),
+      });
+    }
+
+    list.sort((x, y) => x.date.localeCompare(y.date));
+    return list;
+  }
+
+  function renderHolidays(year: number) {
+    const holidays = calculateHolidays(year);
+    const grouped: Record<number, typeof holidays> = {};
+
+    holidays.forEach((h) => {
+      if (!grouped[h.month]) grouped[h.month] = [];
+      grouped[h.month].push(h);
+    });
+
+    let html = '';
+
+    for (let m = 1; m <= 12; m++) {
+      const items = grouped[m];
+      if (!items || items.length === 0) continue;
+
+      const mName = MONTH_NAMES[m - 1];
+      html += `
+        <div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-xs">
+          <div class="bg-slate-50/80 px-6 py-3 border-b border-slate-200 flex items-center justify-between">
+            <h2 class="text-base font-bold text-slate-900">${mName}</h2>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-slate-200 text-slate-700">
+              ${items.length} ${items.length === 1 ? 'feriado' : 'feriados'}
+            </span>
+          </div>
+          <div class="divide-y divide-slate-100">
+            ${items
+              .map(
+                (item) => `
+              <div class="p-4 sm:px-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/50 transition-colors">
+                <div class="flex items-center gap-4">
+                  <div class="w-12 h-12 rounded-xl bg-sky-50 border border-sky-100 text-sky-700 flex flex-col items-center justify-center shrink-0">
+                    <span class="text-xs uppercase font-bold leading-none">${item.monthName.slice(0, 3)}</span>
+                    <span class="text-lg font-black leading-none mt-0.5">${item.day}</span>
+                  </div>
+                  <div>
+                    <h3 class="text-sm sm:text-base font-bold text-slate-900">${item.name}</h3>
+                    <p class="text-xs text-slate-500 capitalize">${item.dayOfWeek}</p>
+                  </div>
+                </div>
+                <div class="sm:text-right">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+                    item.type.includes('Facultativo')
+                      ? 'bg-amber-50 text-amber-800 border border-amber-200'
+                      : 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                  }">
+                    ${item.type}
+                  </span>
+                </div>
+              </div>
+            `
+              )
+              .join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    container.innerHTML = html;
+  }
+
+  yearSelect?.addEventListener('change', () => {
+    const yr = parseInt(yearSelect.value, 10);
+    renderHolidays(yr);
+  });
+</script>

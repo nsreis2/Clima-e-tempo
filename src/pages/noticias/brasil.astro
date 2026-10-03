@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdPlaceholder from '../../components/AdPlaceholder.astro';
+import { getNewsByCategory } from '../../data/news';
+
+const brasilNews = getNewsByCategory('brasil');
+
+const breadcrumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Notícias', url: '/noticias' },
+  { name: 'Brasil', url: '/noticias/brasil' },
+];
+---
+
+<BaseLayout
+  title="Notícias sobre o Brasil - Meio Ambiente, Energia e Infraestrutura"
+  description="Acompanhe acontecimentos relevantes no Brasil: reservatórios, infraestrutura energética, agropecuária e impactos ambientais."
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <section class="max-w-7xl mx-auto py-6">
+    <div class="pb-6 border-b border-slate-200">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800 mb-2">
+        Categoria Editorial
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+        Notícias do Brasil
+      </h1>
+      <p class="mt-2 text-base text-slate-600">
+        Fatos relevantes sobre energia, recursos hídricos, meio ambiente e desenvolvimento nacional.
+      </p>
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="noticias-brasil-top" />
+
+    <div class="my-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {brasilNews.map((news) => (
+        <NewsCard news={news} />
+      ))}
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="noticias-brasil-bottom" />
+  </section>
+</BaseLayout>

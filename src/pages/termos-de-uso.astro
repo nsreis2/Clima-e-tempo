@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdPlaceholder from '../components/AdPlaceholder.astro';
+
+const breadcrumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Termos de Uso', url: '/termos-de-uso' },
+];
+---
+
+<BaseLayout
+  title="Termos de Uso e Condições Gerais | ClimaBrasil"
+  description="Termos e condições de uso do portal ClimaBrasil: diretrizes de acesso, limitação de responsabilidade sobre dados meteorológicos e propriedade intelectual."
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <article class="max-w-4xl mx-auto py-6">
+    <div class="mb-8">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800 mb-2">
+        Termos Legais
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+        Termos de Uso
+      </h1>
+      <p class="mt-2 text-sm text-slate-500">
+        Última atualização: 03 de Outubro de 2026 • ClimaBrasil
+      </p>
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="termos-top" />
+
+    <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-xs space-y-6 text-sm text-slate-700 leading-relaxed my-8">
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">1. Aceitação dos Termos</h2>
+        <p>
+          Ao acessar e utilizar o portal <strong>ClimaBrasil</strong> (<code>https://climabrasil.com.br</code>), você expressa sua concordância e aceitação integral de todos os termos, condições e avisos aqui estabelecidos. Caso não concorde com qualquer disposição, recomendamos a interrupção imediata do uso dos nossos serviços.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">2. Descrição dos Serviços Prestados</h2>
+        <p>
+          O ClimaBrasil é uma plataforma digital que disponibiliza, de forma livre e gratuita:
+        </p>
+        <ul class="list-disc list-inside space-y-1.5 pl-2 text-slate-600">
+          <li>Previsão meteorológica baseada em modelos numéricos abertos globais e regionais;</li>
+          <li>Avisos e alertas sobre eventos climáticos severos e fenômenos atmosféricos (como El Niño e La Niña);</li>
+          <li>Resumos informativos de notícias com atribuição à fonte original;</li>
+          <li>Ferramentas práticas de utilidade pública (consulta de CEP, dados cadastrais públicos de CNPJ, conversão cambial de referência e calendário de feriados nacionais).</li>
+        </ul>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">3. Natureza Informativa e Limitação de Responsabilidade Meteorológica</h2>
+        <p>
+          A meteorologia é uma ciência fundamentada em probabilidades matemáticas e modelos atmosféricos complexos sujeitos a variações imprevisíveis da natureza. Por essa razão:
+        </p>
+        <ul class="list-disc list-inside space-y-1.5 pl-2 text-slate-600">
+          <li><strong>As previsões possuem caráter estritamente informativo e orientativo:</strong> Não constituem garantia matemática de ocorrência de chuvas, ventos ou temperaturas exatas;</li>
+          <li><strong>Situações de Risco à Vida ou Emergência:</strong> O usuário deve seguir exclusivamente os alertas e determinações emitidos pelos órgãos oficiais competentes, em especial a <strong>Defesa Civil (telefone 199)</strong> e o <strong>Corpo de Bombeiros (telefone 193)</strong>;</li>
+          <li>O ClimaBrasil não se responsabiliza por prejuízos materiais, lucros cessantes, perdas agrícolas ou cancelamentos de viagens decorrentes de divergências entre a previsão exibida e as condições meteorológicas reais observadas.</li>
+        </ul>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">4. Dados Financeiros e de Câmbio</h2>
+        <p>
+          As cotações de moedas (Dólar, Euro, Libra) exibidas no Conversor de Moedas refletem taxas de câmbio comercial de referência para fins meramente comparativos e educacionais. Não caracterizam oferta ou recomendação de compra, venda ou investimento financeiro. Em operações reais, consulte sua instituição financeira autorizada pelo Banco Central do Brasil.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">5. Propriedade Intelectual e Uso Adequado</h2>
+        <p>
+          A estrutura do portal, código-fonte, layout, identidade visual e elementos gráficos são protegidos pelas leis de propriedade intelectual vigentes.
+        </p>
+        <p>
+          É terminantemente proibido o uso de robôs, scrapers ou meios automatizados para sobrecarregar nossa infraestrutura, aplicar engenharia reversa ou tentar burlar os limites de requisições do portal e das APIs parceiras.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">6. Legislação Aplicável e Foro</h2>
+        <p>
+          Estes Termos de Uso são regidos e interpretados segundo a legislação brasileira, em especial o Marco Civil da Internet (Lei nº 12.965/2014) e o Código de Defesa do Consumidor (Lei nº 8.078/1990).
+        </p>
+      </section>
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="termos-bottom" />
+  </article>
+</BaseLayout>

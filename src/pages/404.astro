@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Página Não Encontrada (404) | ClimaBrasil"
+  description="A página que você tentou acessar não existe, foi alterada ou removida temporariamente."
+  noindex={true}
+>
+  <div class="min-h-[60vh] flex flex-col items-center justify-center text-center px-4 py-16">
+    <div class="w-24 h-24 rounded-3xl bg-sky-100 text-sky-600 flex items-center justify-center mb-6 shadow-xs">
+      <svg class="w-12 h-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+        <line x1="8" y1="12" x2="8.01" y2="12"></line>
+        <line x1="12" y1="12" x2="12.01" y2="12"></line>
+        <line x1="16" y1="12" x2="16.01" y2="12"></line>
+      </svg>
+    </div>
+
+    <span class="text-sm font-bold uppercase tracking-widest text-sky-600 mb-2">Erro 404</span>
+    <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight mb-4">
+      Página Não Encontrada
+    </h1>
+    <p class="text-base text-slate-600 max-w-md mx-auto mb-8">
+      A página que você procura pode ter sido alterada, excluída ou o endereço digitado está incorreto.
+    </p>
+
+    <div class="flex flex-wrap items-center justify-center gap-3">
+      <a
+        href="/"
+        class="px-6 py-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold text-sm rounded-xl transition-colors shadow-xs"
+      >
+        Voltar para a Página Inicial
+      </a>
+      <a
+        href="/clima"
+        class="px-6 py-3 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm rounded-xl border border-slate-200 transition-colors shadow-xs"
+      >
+        Ver Previsão do Tempo
+      </a>
+      <a
+        href="/ferramentas"
+        class="px-6 py-3 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm rounded-xl border border-slate-200 transition-colors shadow-xs"
+      >
+        Acessar Ferramentas
+      </a>
+    </div>
+  </div>
+</BaseLayout>

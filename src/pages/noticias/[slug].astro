@@ -1,0 +1,146 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdPlaceholder from '../../components/AdPlaceholder.astro';
+import { NEWS_ITEMS } from '../../data/news';
+import { buildNewsArticleSchema, SITE_URL } from '../../utils/seo';
+
+export async function getStaticPaths() {
+  return NEWS_ITEMS.map((news) => ({
+    params: { slug: news.slug },
+    props: { news },
+  }));
+}
+
+const { news } = Astro.props;
+
+const breadcrumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Notícias', url: '/noticias' },
+  { name: news.categoryLabel, url: `/noticias/${news.category}` },
+  { name: news.title.slice(0, 35) + '...', url: `/noticias/${news.slug}` },
+];
+
+const articleSchema = buildNewsArticleSchema({
+  title: news.title,
+  description: news.summary,
+  url: `${SITE_URL}/noticias/${news.slug}`,
+  publishedAt: news.publishedAtISO,
+  author: news.source,
+  source: news.source,
+});
+
+const relatedNews = NEWS_ITEMS.filter((n) => n.id !== news.id).slice(0, 2);
+---
+
+<BaseLayout
+  title={news.title}
+  description={news.summary}
+  ogType="article"
+  publishedTime={news.publishedAtISO}
+  schema={articleSchema}
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <article class="max-w-4xl mx-auto py-4">
+    <!-- Header da Notícia -->
+    <header class="mb-8">
+      <div class="flex items-center gap-3 mb-4">
+        <a
+          href={`/noticias/${news.category}`}
+          class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-sky-100 text-sky-800 hover:bg-sky-200 transition-colors"
+        >
+          {news.categoryLabel}
+        </a>
+        <span class="text-xs text-slate-400">•</span>
+        <time datetime={news.publishedAtISO} class="text-xs text-slate-500 font-medium">
+          {news.date}
+        </time>
+        <span class="text-xs text-slate-400">•</span>
+        <span class="text-xs text-slate-500">{news.readTime}</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight leading-tight mb-4">
+        {news.title}
+      </h1>
+
+      <!-- Resumo com destaque tipográfico (Lead) -->
+      <p class="text-base sm:text-lg text-slate-600 font-medium leading-relaxed bg-slate-100/70 p-4 sm:p-5 rounded-2xl border-l-4 border-sky-500">
+        {news.summary}
+      </p>
+
+      <!-- Identificação da Fonte Oficial -->
+      <div class="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 pb-4 border-b border-slate-200">
+        <div class="flex items-center gap-1.5">
+          <span>Veículo / Fonte Original:</span>
+          <strong class="text-slate-800">{news.source}</strong>
+        </div>
+        <a
+          href={news.sourceUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-sky-600 hover:underline font-semibold flex items-center gap-1"
+        >
+          Acessar publicação original ↗
+        </a>
+      </div>
+    </header>
+
+    <AdPlaceholder slotType="horizontal" slotId="news-article-top" />
+
+    <!-- Conteúdo em Parágrafos Sintéticos e Informativos -->
+    <div class="prose prose-slate max-w-none text-slate-700 text-base leading-relaxed space-y-4 my-6">
+      {news.content.map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+    </div>
+
+    <!-- Tags do artigo -->
+    <div class="mt-8 pt-6 border-t border-slate-200">
+      <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">
+        Tópicos Relacionados:
+      </span>
+      <div class="flex flex-wrap gap-2">
+        {news.tags.map((tag) => (
+          <span class="px-3 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-medium">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <!-- Aviso de Direitos Autorais e Transparência Editorial -->
+    <div class="mt-8 p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-500 leading-relaxed">
+      <strong>Nota de Transparência Editorial:</strong> Este conteúdo é uma síntese informativa produzida com base nos dados públicos divulgados pelo(a) <em>{news.source}</em>. O ClimaBrasil não reproduz matérias integrais protegidas e respeita os direitos autorais dos órgãos produtores de informação. Para o texto integral ou comunicados oficiais, consulte a fonte original indicada acima.
+    </div>
+
+    <AdPlaceholder slotType="in-article" slotId="news-article-bottom" />
+
+    <!-- Notícias Relacionadas -->
+    {relatedNews.length > 0 && (
+      <section class="mt-12 pt-8 border-t border-slate-200">
+        <h2 class="text-xl font-bold text-slate-900 mb-4">
+          Veja Também
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {relatedNews.map((rel) => (
+            <a
+              href={`/noticias/${rel.slug}`}
+              class="p-4 bg-white rounded-2xl border border-slate-200 hover:border-sky-300 hover:shadow-xs transition-all block group"
+            >
+              <span class="text-[11px] font-bold text-sky-700 uppercase tracking-wider">
+                {rel.categoryLabel}
+              </span>
+              <h3 class="text-sm font-bold text-slate-900 group-hover:text-sky-600 transition-colors mt-1 mb-2 line-clamp-2">
+                {rel.title}
+              </h3>
+              <p class="text-xs text-slate-500 line-clamp-2">
+                {rel.summary}
+              </p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+</BaseLayout>

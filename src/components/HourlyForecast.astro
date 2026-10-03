@@ -1,0 +1,64 @@
+---
+import type { HourlyForecastItem } from '../services/weather/types';
+
+export interface Props {
+  hourly: HourlyForecastItem[];
+}
+
+const { hourly } = Astro.props;
+---
+
+<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h3 class="text-lg sm:text-xl font-bold text-slate-900">
+        Previsão Hora a Hora (Próximas 24 horas)
+      </h3>
+      <p class="text-xs text-slate-500 mt-0.5">
+        Evolução da temperatura e probabilidade de chuva ao longo do dia
+      </p>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto pb-4 pt-1 scrollbar-thin">
+    <div class="flex gap-3 min-w-max">
+      {hourly.slice(0, 24).map((hourItem) => (
+        <div class="flex flex-col items-center justify-between w-20 p-3 rounded-2xl bg-slate-50/70 border border-slate-200/60 text-center">
+          <!-- Horário -->
+          <span class="text-xs font-semibold text-slate-700">
+            {hourItem.hour}
+          </span>
+
+          <!-- Ícone curto -->
+          <div class="my-2 text-sky-600">
+            {hourItem.weatherCode <= 1 && (
+              <svg class="w-6 h-6 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"></circle>
+              </svg>
+            )}
+            {hourItem.weatherCode >= 2 && hourItem.weatherCode <= 3 && (
+              <svg class="w-6 h-6 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+              </svg>
+            )}
+            {hourItem.weatherCode >= 51 && (
+              <svg class="w-6 h-6 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+              </svg>
+            )}
+          </div>
+
+          <!-- Temperatura -->
+          <span class="text-base font-bold text-slate-900">
+            {hourItem.temperature}°
+          </span>
+
+          <!-- Probabilidade de chuva -->
+          <div class="mt-2 text-[10px] font-semibold text-sky-700">
+            {hourItem.precipitationProbability > 0 ? `${hourItem.precipitationProbability}%` : '0%'}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>

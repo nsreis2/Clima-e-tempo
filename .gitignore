@@ -1,0 +1,32 @@
+# Dependências
+node_modules/
+
+# Saída de build
+dist/
+
+# Variáveis de ambiente
+.env
+.env.local
+.env.production
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Astro
+.astro/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Cache
+.cache/

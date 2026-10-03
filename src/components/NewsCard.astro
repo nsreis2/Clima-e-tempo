@@ -1,0 +1,69 @@
+---
+import type { NewsItem } from '../data/news';
+
+export interface Props {
+  news: NewsItem;
+  featured?: boolean;
+}
+
+const { news, featured = false } = Astro.props;
+
+const categoryColors = {
+  clima: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+  brasil: 'bg-sky-100 text-sky-800 border-sky-200',
+  mundo: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+  tecnologia: 'bg-purple-100 text-purple-800 border-purple-200',
+}[news.category];
+---
+
+<article
+  class={`group bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 hover:shadow-md hover:border-slate-300 transition-all flex flex-col justify-between ${
+    featured ? 'lg:col-span-2 bg-gradient-to-br from-white to-slate-50' : ''
+  }`}
+>
+  <div>
+    <!-- Top row: Category tag & Date -->
+    <div class="flex items-center justify-between gap-2 mb-3">
+      <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${categoryColors}`}>
+        {news.categoryLabel}
+      </span>
+      <div class="flex items-center gap-2 text-xs text-slate-400">
+        <time datetime={news.publishedAtISO}>{news.date}</time>
+        <span>•</span>
+        <span>{news.readTime}</span>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <h3 class={`font-bold text-slate-900 group-hover:text-sky-600 transition-colors leading-snug mb-2 ${
+      featured ? 'text-xl sm:text-2xl' : 'text-base sm:text-lg'
+    }`}>
+      <a href={`/noticias/${news.slug}`}>
+        {news.title}
+      </a>
+    </h3>
+
+    <!-- Summary -->
+    <p class="text-sm text-slate-600 leading-relaxed line-clamp-3">
+      {news.summary}
+    </p>
+  </div>
+
+  <!-- Footer row: Source & read more link -->
+  <div class="mt-4 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+    <div class="flex items-center gap-1.5">
+      <span class="text-slate-400">Fonte:</span>
+      <span class="font-medium text-slate-700">{news.source}</span>
+    </div>
+    <a
+      href={`/noticias/${news.slug}`}
+      class="inline-flex items-center gap-1 text-sky-600 hover:text-sky-800 font-semibold group-hover:translate-x-0.5 transition-transform"
+      aria-label={`Ler notícia completa: ${news.title}`}
+    >
+      Ler notícia
+      <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7" />
+      </svg>
+    </a>
+  </div>
+</article>

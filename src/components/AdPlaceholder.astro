@@ -1,0 +1,30 @@
+---
+export interface Props {
+  slotType?: 'horizontal' | 'in-article' | 'sidebar' | 'responsive';
+  slotId?: string;
+  className?: string;
+}
+
+const { slotType = 'horizontal', slotId = 'default', className = '' } = Astro.props;
+
+// Classes por tipo de posicionamento publicitário padrão
+const sizeClasses = {
+  'horizontal': 'min-h-[90px] max-w-4xl mx-auto py-2',
+  'in-article': 'min-h-[120px] max-w-2xl mx-auto my-6',
+  'sidebar': 'min-h-[250px] w-full',
+  'responsive': 'min-h-[100px] w-full',
+}[slotType];
+---
+
+<div
+  class={`adsense-slot-container flex items-center justify-center border border-dashed border-slate-200/80 bg-slate-100/40 rounded-xl my-4 text-center transition-all ${sizeClasses} ${className}`}
+  data-ad-slot={slotId}
+  data-ad-type={slotType}
+  aria-hidden="true"
+>
+  <div class="px-4 py-2">
+    <span class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">
+      Espaço Publicitário Reservado
+    </span>
+  </div>
+</div>

@@ -1,0 +1,239 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WeatherCard from '../components/WeatherCard.astro';
+import ForecastCard from '../components/ForecastCard.astro';
+import HourlyForecast from '../components/HourlyForecast.astro';
+import SearchCity from '../components/SearchCity.astro';
+import NewsCard from '../components/NewsCard.astro';
+import ToolCard from '../components/ToolCard.astro';
+import AdPlaceholder from '../components/AdPlaceholder.astro';
+import { fetchWeather } from '../services/weather/api';
+import { getRecentNews } from '../data/news';
+import { ACTIVE_ALERTS } from '../data/alerts';
+import { EL_NINO_OVERVIEW } from '../data/elNino';
+import { CITIES } from '../data/cities';
+import { SITE_NAME, SITE_URL } from '../utils/seo';
+
+// Default city for homepage spotlight: Porto Alegre (reference example in prompt)
+const defaultCity = CITIES.find((c) => c.slug === 'porto-alegre-rs') || CITIES[0];
+const weather = await fetchWeather(defaultCity.latitude, defaultCity.longitude, defaultCity.name, defaultCity.uf);
+
+const recentNews = getRecentNews(3);
+const primaryAlert = ACTIVE_ALERTS[0];
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  'name': SITE_NAME,
+  'url': SITE_URL,
+  'description': 'Portal brasileiro de previsão do tempo em tempo real, alertas meteorológicos, monitoramento de El Niño e ferramentas gratuitas de utilidade pública.',
+  'potentialAction': {
+    '@type': 'SearchAction',
+    'target': `${SITE_URL}/clima/{search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+};
+---
+
+<BaseLayout
+  title="Clima, Notícias e Ferramentas Gratuitas em um só lugar"
+  description="Previsão do tempo em tempo real para todo o Brasil, alertas meteorológicos oficiais, notícias de clima, monitoramento de El Niño/La Niña e ferramentas como CEP, CNPJ, Moedas e Feriados."
+  schema={websiteSchema}
+>
+  <!-- HERO SECTION -->
+  <section class="text-center py-8 sm:py-14 max-w-4xl mx-auto">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-50 border border-sky-200 text-sky-800 text-xs font-semibold mb-4">
+      <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+      Portal Meteorológico & Utilidades do Brasil
+    </div>
+
+    <h1 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+      Clima, notícias e ferramentas <br class="hidden sm:inline" />
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-blue-700">
+        em um só lugar
+      </span>
+    </h1>
+
+    <p class="mt-3 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto">
+      Consulte a previsão atualizada da sua cidade, fique por dentro das mudanças do tempo e utilize serviços gratuitos sem cadastro.
+    </p>
+
+    <!-- Campo de Busca de Cidade -->
+    <div class="mt-8">
+      <SearchCity isHero={true} placeholder="Digite sua cidade (ex: Porto Alegre, RS)" />
+    </div>
+  </section>
+
+  <!-- ADSENSE BANNER HORIZONTAL -->
+  <AdPlaceholder slotType="horizontal" slotId="home-hero-bottom" />
+
+  <!-- SEÇÃO ALERTA METEOROLÓGICO ATIVO -->
+  {primaryAlert && (
+    <section class="mb-10">
+      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-start gap-3">
+          <div class="p-2 rounded-xl bg-amber-100 text-amber-800 shrink-0 mt-0.5">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-900 bg-amber-200/80 px-2 py-0.5 rounded">
+                Aviso Oficial
+              </span>
+              <span class="text-xs text-amber-700">{primaryAlert.source}</span>
+            </div>
+            <h2 class="text-base font-bold text-slate-900 mt-1">
+              {primaryAlert.title}
+            </h2>
+            <p class="text-sm text-slate-700 mt-0.5">
+              {primaryAlert.description}
+            </p>
+          </div>
+        </div>
+        <a
+          href="/alertas"
+          class="shrink-0 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold rounded-xl transition-colors text-center"
+        >
+          Ver Todos os Avisos →
+        </a>
+      </div>
+    </section>
+  )}
+
+  <!-- SEÇÃO CLIMA EM DESTAQUE (Porto Alegre, RS como exemplo padrão) -->
+  <section class="space-y-6 mb-12">
+    <div class="flex flex-wrap items-center justify-between gap-2">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-900">
+          Previsão do Tempo em Destaque
+        </h2>
+        <p class="text-sm text-slate-500">
+          Dados em tempo real com probabilidade de chuva, vento e umidade
+        </p>
+      </div>
+      <a href="/clima" class="text-sm font-semibold text-sky-600 hover:text-sky-800 transition-colors">
+        Ver outras cidades brasileiras →
+      </a>
+    </div>
+
+    <!-- Card Principal do Tempo Atual -->
+    <WeatherCard weather={weather} />
+
+    <!-- Previsão Hora a Hora -->
+    <HourlyForecast hourly={weather.hourly} />
+
+    <!-- Previsão dos Próximos 7 Dias -->
+    <ForecastCard daily={weather.daily} />
+  </section>
+
+  <!-- SEÇÃO DESTAQUE EL NIÑO / LA NIÑA -->
+  <section class="mb-12">
+    <div class="bg-gradient-to-r from-blue-900 via-sky-900 to-indigo-950 rounded-3xl p-6 sm:p-10 text-white relative overflow-hidden shadow-md">
+      <div class="relative z-10 max-w-3xl">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/20 text-sky-200 border border-sky-400/30 mb-3">
+          Monitoramento Oceânico Global
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+          El Niño & La Niña 2026/2027: O que esperar no Brasil?
+        </h2>
+        <p class="mt-2 text-sm sm:text-base text-slate-200 leading-relaxed">
+          Entenda como a temperatura das águas do Oceano Pacífico impacta diretamente o regime de chuvas, ondas de calor e estiagens nas regiões Sul, Sudeste, Centro-Oeste, Nordeste e Norte.
+        </p>
+        <div class="mt-4 flex flex-wrap items-center gap-4 text-xs text-sky-200">
+          <span>Fase atual: <strong class="text-white">{EL_NINO_OVERVIEW.currentPhase}</strong></span>
+          <span>•</span>
+          <span>Fontes: <strong class="text-white">NOAA, INMET, CPTEC</strong></span>
+        </div>
+        <div class="mt-6">
+          <a
+            href="/el-nino"
+            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-sm transition-all shadow-sm"
+          >
+            Acessar Especial Completo El Niño
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO NOTÍCIAS RECENTES -->
+  <section class="mb-12">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-900">
+          Últimas Notícias
+        </h2>
+        <p class="text-sm text-slate-500">
+          Informações relevantes sobre clima, meio ambiente e tecnologia no Brasil e no mundo
+        </p>
+      </div>
+      <a href="/noticias" class="text-sm font-semibold text-sky-600 hover:text-sky-800 transition-colors">
+        Ver todas as notícias →
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {recentNews.map((news) => (
+        <NewsCard news={news} />
+      ))}
+    </div>
+  </section>
+
+  <!-- SEÇÃO FERRAMENTAS GRATUITAS -->
+  <section class="mb-12">
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-900">
+          Ferramentas Gratuitas de Utilidade Pública
+        </h2>
+        <p class="text-sm text-slate-500">
+          Serviços rápidos, sem cadastro e com dados oficiais do Brasil
+        </p>
+      </div>
+      <a href="/ferramentas" class="text-sm font-semibold text-sky-600 hover:text-sky-800 transition-colors">
+        Ver todas as ferramentas →
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      <ToolCard
+        title="Consulta CEP"
+        description="Localize endereços, logradouros e bairros pelo CEP oficial dos Correios (ViaCEP) com cópia em 1 clique."
+        href="/ferramentas/cep"
+        badge="ViaCEP"
+        icon="cep"
+      />
+      <ToolCard
+        title="Consulta CNPJ"
+        description="Verifique a situação cadastral, razão social, atividade e município de empresas brasileiras."
+        href="/ferramentas/cnpj"
+        badge="BrasilAPI"
+        icon="cnpj"
+      />
+      <ToolCard
+        title="Conversor de Moedas"
+        description="Cotação de referência em tempo real para Real (BRL), Dólar (USD), Euro (EUR) e Libra (GBP)."
+        href="/ferramentas/moedas"
+        badge="Ao Vivo"
+        icon="currency"
+      />
+      <ToolCard
+        title="Calendário de Feriados"
+        description="Consulte todos os feriados nacionais do ano com dias da semana e datas comemorativas oficiais."
+        href="/ferramentas/feriados"
+        badge="2026/2027"
+        icon="calendar"
+      />
+    </div>
+  </section>
+
+  <!-- ADSENSE BANNER INFERIOR -->
+  <AdPlaceholder slotType="horizontal" slotId="home-footer-top" />
+</BaseLayout>

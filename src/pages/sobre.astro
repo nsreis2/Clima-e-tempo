@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdPlaceholder from '../components/AdPlaceholder.astro';
+
+const breadcrumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Sobre', url: '/sobre' },
+];
+---
+
+<BaseLayout
+  title="Sobre o ClimaBrasil - Missão, Tecnologia e Fontes de Dados"
+  description="Conheça o ClimaBrasil, um portal independente dedicado a democratizar previsões meteorológicas, monitoramento de El Niño e ferramentas gratuitas de utilidade pública."
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <article class="max-w-4xl mx-auto py-6">
+    <div class="mb-8">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800 mb-2">
+        Institucional
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+        Sobre o ClimaBrasil
+      </h1>
+      <p class="mt-2 text-base text-slate-600 leading-relaxed">
+        Democratizando o acesso a informações meteorológicas precisas, notícias verificadas e ferramentas de utilidade pública para todos os brasileiros.
+      </p>
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="sobre-top" />
+
+    <div class="prose prose-slate max-w-none text-slate-700 text-base leading-relaxed space-y-6 my-8">
+      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+        <h2 class="text-2xl font-bold text-slate-900">Nossa Missão</h2>
+        <p>
+          O <strong>ClimaBrasil</strong> nasceu com um propósito claro: entregar previsão do tempo ágil, confiável e limpa para quem vive, trabalha ou viaja pelo Brasil. Acreditamos que a informação meteorológica é um bem público fundamental que afeta desde o planejamento diário de uma família até o cronograma de plantio e colheita do produtor rural.
+        </p>
+        <p>
+          Diferente de portais sobrecarregados de scripts pesados, rastreadores invasivos e interfaces complexas, o ClimaBrasil prioriza velocidade extrema, navegação direta e experiência mobile de primeira classe.
+        </p>
+      </section>
+
+      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+        <h2 class="text-2xl font-bold text-slate-900">Princípios Editoriais e Éticos</h2>
+        <ul class="list-disc list-inside space-y-2 text-slate-700">
+          <li><strong>Sem Conteúdo Artificial em Massa:</strong> Cada página do portal tem um propósito real e funcionalidade comprovada. Não geramos páginas vazias para manipular mecanismos de busca.</li>
+          <li><strong>Respeito a Direitos Autorais:</strong> Não reproduzimos textos completos de veículos de imprensa. Quando divulgamos acontecimentos, produzimos sínteses informativas próprias e indicamos com clareza o veículo de origem com link direto.</li>
+          <li><strong>Fontes Oficiais Priorizadas:</strong> Alertas meteorológicos e fenômenos climáticos globais (como El Niño e La Niña) são sempre fundamentados em dados de órgãos oficiais e institutos de pesquisa reconhecidos.</li>
+          <li><strong>Privacidade do Usuário:</strong> Não exigimos cadastros, não criamos barreiras de acesso e não coletamos dados pessoais desnecessários. Suas preferências de cidade ficam salvas apenas no seu próprio navegador via armazenamento local seguro.</li>
+        </ul>
+      </section>
+
+      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
+        <h2 class="text-2xl font-bold text-slate-900">Fontes de Dados Utilizadas</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 not-prose">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <h3 class="font-bold text-slate-900 text-sm">Open-Meteo</h3>
+            <p class="text-xs text-slate-600 mt-1">API meteorológica aberta que integra modelos do ECMWF, NOAA GFS, DWD ICON e Météo-France com dados de alta resolução espacial.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <h3 class="font-bold text-slate-900 text-sm">INMET & CPTEC/INPE</h3>
+            <p class="text-xs text-slate-600 mt-1">Institutos meteorológicos oficiais brasileiros para boletins de avisos, normas climatológicas e monitoramento oceânico.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <h3 class="font-bold text-slate-900 text-sm">ViaCEP & Correios</h3>
+            <p class="text-xs text-slate-600 mt-1">Base oficial de logradouros, bairros e Códigos de Endereçamento Postal do Brasil.</p>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <h3 class="font-bold text-slate-900 text-sm">BrasilAPI & AwesomeAPI</h3>
+            <p class="text-xs text-slate-600 mt-1">Serviços abertos comunitários para consulta pública de CNPJs cadastrados na Receita Federal e cotações de moedas comerciais.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-3">
+        <h2 class="text-2xl font-bold text-slate-900">Arquitetura & Engenharia</h2>
+        <p>
+          O portal é desenvolvido com arquitetura estática moderna (Astro, TypeScript e Tailwind CSS), garantindo que as páginas carreguem em milissegundos sem sobrecarregar o dispositivo do usuário. Toda a infraestrutura é otimizada para Core Web Vitals e hospedagem de baixo consumo de energia.
+        </p>
+      </section>
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="sobre-bottom" />
+  </article>
+</BaseLayout>

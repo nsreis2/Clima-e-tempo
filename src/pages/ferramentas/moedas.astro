@@ -1,0 +1,179 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdPlaceholder from '../../components/AdPlaceholder.astro';
+import { buildWebApplicationSchema } from '../../utils/seo';
+
+const breadcrumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Ferramentas', url: '/ferramentas' },
+  { name: 'Conversor de Moedas', url: '/ferramentas/moedas' },
+];
+
+const schema = buildWebApplicationSchema({
+  name: 'Conversor de Moedas - ClimaBrasil',
+  description: 'Converta valores entre Real, Dólar, Euro e Libra com cotação de mercado.',
+  url: 'https://climabrasil.com.br/ferramentas/moedas',
+  applicationCategory: 'FinanceApplication',
+});
+---
+
+<BaseLayout
+  title="Conversor de Moedas em Tempo Real - Dólar, Euro, Libra"
+  description="Converta valores entre Real (BRL), Dólar (USD), Euro (EUR) e Libra (GBP) com cotação atualizada do mercado comercial."
+  schema={schema}
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <section class="max-w-2xl mx-auto py-6">
+    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+      Conversor de Moedas
+    </h1>
+    <p class="mt-2 text-sm text-slate-600 mb-6">
+      Cotação de referência do mercado comercial. Atualizado em tempo real via AwesomeAPI.
+    </p>
+
+    <form id="currency-form" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs space-y-4">
+      <div>
+        <label for="amount-input" class="block text-sm font-semibold text-slate-700 mb-1">Valor</label>
+        <input
+          type="number"
+          id="amount-input"
+          min="0.01"
+          step="0.01"
+          value="1"
+          class="w-full px-4 py-3 border border-slate-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-sky-500"
+          aria-label="Valor a converter"
+          required
+        />
+      </div>
+
+      <div class="grid grid-cols-5 gap-3 items-end">
+        <div class="col-span-2">
+          <label for="from-currency" class="block text-sm font-semibold text-slate-700 mb-1">De</label>
+          <select id="from-currency" class="w-full px-4 py-3 border border-slate-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white">
+            <option value="USD">USD - Dólar</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="BRL" selected>BRL - Real</option>
+            <option value="GBP">GBP - Libra</option>
+          </select>
+        </div>
+
+        <div class="flex items-center justify-center pb-1">
+          <button
+            type="button"
+            id="swap-btn"
+            class="w-10 h-10 rounded-full bg-slate-100 hover:bg-sky-100 text-slate-600 hover:text-sky-700 flex items-center justify-center transition-colors cursor-pointer"
+            aria-label="Trocar moedas"
+          >
+            ⇄
+          </button>
+        </div>
+
+        <div class="col-span-2">
+          <label for="to-currency" class="block text-sm font-semibold text-slate-700 mb-1">Para</label>
+          <select id="to-currency" class="w-full px-4 py-3 border border-slate-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-sky-500 bg-white">
+            <option value="USD" selected>USD - Dólar</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="BRL">BRL - Real</option>
+            <option value="GBP">GBP - Libra</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="w-full py-3 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-xl transition-colors shadow-xs cursor-pointer">
+        Converter
+      </button>
+    </form>
+
+    <div id="currency-loading" class="hidden mt-4 text-center text-sm text-slate-500 animate-pulse">Buscando cotações...</div>
+    <div id="currency-error" class="hidden mt-4 p-4 rounded-xl bg-rose-50 border border-rose-200 text-sm text-rose-800"></div>
+
+    <div id="currency-result" class="hidden mt-6 bg-white rounded-2xl border border-slate-200 p-6 shadow-xs text-center">
+      <div class="text-xs text-slate-400 font-medium mb-1">Resultado</div>
+      <div id="res-converted" class="text-3xl font-black text-slate-900 mb-2"></div>
+      <div id="res-rate" class="text-sm text-slate-600 mb-3"></div>
+      <div id="res-timestamp" class="text-xs text-slate-400"></div>
+      <div class="mt-3 text-[11px] text-slate-400">
+        Fonte: AwesomeAPI — Cotação de referência do mercado comercial.
+      </div>
+    </div>
+
+    <div class="mt-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800">
+      <strong>Nota:</strong> Esta cotação é de referência do mercado comercial. Não representa cotação bancária de compra ou venda. Para operações financeiras reais, consulte seu banco ou corretora.
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="moedas-bottom" className="mt-8" />
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('currency-form') as HTMLFormElement;
+  const amountInput = document.getElementById('amount-input') as HTMLInputElement;
+  const fromSelect = document.getElementById('from-currency') as HTMLSelectElement;
+  const toSelect = document.getElementById('to-currency') as HTMLSelectElement;
+  const swapBtn = document.getElementById('swap-btn')!;
+  const loading = document.getElementById('currency-loading')!;
+  const errorDiv = document.getElementById('currency-error')!;
+  const resultDiv = document.getElementById('currency-result')!;
+
+  swapBtn.addEventListener('click', () => {
+    const temp = fromSelect.value;
+    fromSelect.value = toSelect.value;
+    toSelect.value = temp;
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const amount = parseFloat(amountInput.value);
+    if (isNaN(amount) || amount <= 0) { showError('Digite um valor positivo.'); return; }
+
+    loading.classList.remove('hidden');
+    errorDiv.classList.add('hidden');
+    resultDiv.classList.add('hidden');
+
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      const res = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,GBP-BRL', { signal: controller.signal });
+      clearTimeout(timeout);
+
+      let rates: Record<string, number> = { 'BRL': 1.0, 'USD': 5.50, 'EUR': 6.00, 'GBP': 7.15 };
+
+      if (res.ok) {
+        const data = await res.json();
+        rates = {
+          'BRL': 1.0,
+          'USD': parseFloat(data.USDBRL?.bid || '5.50'),
+          'EUR': parseFloat(data.EURBRL?.bid || '6.00'),
+          'GBP': parseFloat(data.GBPBRL?.bid || '7.15'),
+        };
+      }
+
+      const from = fromSelect.value;
+      const to = toSelect.value;
+      const fromRate = rates[from] || 1;
+      const toRate = rates[to] || 1;
+      const amountInBrl = amount * fromRate;
+      const converted = amountInBrl / toRate;
+      const directRate = fromRate / toRate;
+
+      document.getElementById('res-converted')!.textContent = `${converted.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 4 })} ${to}`;
+      document.getElementById('res-rate')!.textContent = `1 ${from} = ${directRate.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 4 })} ${to}`;
+      document.getElementById('res-timestamp')!.textContent = `Atualizado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
+
+      resultDiv.classList.remove('hidden');
+    } catch (err: any) {
+      showError('Erro ao buscar cotações. Tente novamente.');
+    } finally {
+      loading.classList.add('hidden');
+    }
+  });
+
+  function showError(msg: string) {
+    errorDiv.textContent = msg;
+    errorDiv.classList.remove('hidden');
+    resultDiv.classList.add('hidden');
+    loading.classList.add('hidden');
+  }
+</script>

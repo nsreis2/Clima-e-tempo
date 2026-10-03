@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SearchCity from '../../components/SearchCity.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdPlaceholder from '../../components/AdPlaceholder.astro';
+import { CITIES } from '../../data/cities';
+
+const regions = ['Sul', 'Sudeste', 'Centro-Oeste', 'Nordeste', 'Norte'] as const;
+
+const breadcrumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Clima', url: '/clima' },
+];
+---
+
+<BaseLayout
+  title="Previsão do Tempo no Brasil - Capitais e Cidades"
+  description="Consulte a previsão do tempo para as principais capitais e cidades brasileiras. Temperatura, probabilidade de chuva, vento e umidade em tempo real."
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <section class="text-center py-6 sm:py-10 max-w-3xl mx-auto">
+    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+      Previsão do Tempo no Brasil
+    </h1>
+    <p class="mt-2 text-base text-slate-600">
+      Selecione sua cidade ou faça uma busca direta para conferir a temperatura atual, probabilidade de chuva e previsão para os próximos dias.
+    </p>
+
+    <div class="mt-6">
+      <SearchCity isHero={false} placeholder="Pesquise sua cidade..." />
+    </div>
+  </section>
+
+  <AdPlaceholder slotType="horizontal" slotId="clima-hub-top" />
+
+  <!-- Cidades organizadas por Região -->
+  <section class="space-y-10 my-8">
+    {regions.map((reg) => {
+      const citiesInRegion = CITIES.filter((c) => c.region === reg);
+      return (
+        <div>
+          <div class="flex items-center gap-3 mb-4 pb-2 border-b border-slate-200">
+            <h2 class="text-xl font-bold text-slate-900">
+              Região {reg}
+            </h2>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+              {citiesInRegion.length} cidades cadastradas
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {citiesInRegion.map((city) => (
+              <a
+                href={`/clima/${city.slug}`}
+                class="group bg-white rounded-2xl border border-slate-200/80 p-4 hover:border-sky-300 hover:shadow-sm transition-all flex items-start justify-between"
+              >
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold px-2 py-0.5 rounded bg-sky-50 text-sky-700">
+                      {city.uf}
+                    </span>
+                    <h3 class="text-base font-bold text-slate-900 group-hover:text-sky-600 transition-colors">
+                      {city.name}
+                    </h3>
+                  </div>
+                  <p class="text-xs text-slate-500 mt-1 line-clamp-2">
+                    {city.description}
+                  </p>
+                  <span class="text-[11px] text-slate-400 mt-2 block">
+                    Clima: {city.climateType}
+                  </span>
+                </div>
+                <span class="text-sky-600 font-bold text-sm shrink-0 ml-2 group-hover:translate-x-1 transition-transform">
+                  →
+                </span>
+              </a>
+            ))}
+          </div>
+        </div>
+      );
+    })}
+  </section>
+
+  <AdPlaceholder slotType="horizontal" slotId="clima-hub-bottom" />
+</BaseLayout>

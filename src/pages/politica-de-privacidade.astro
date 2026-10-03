@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdPlaceholder from '../components/AdPlaceholder.astro';
+
+const breadcrumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Política de Privacidade', url: '/politica-de-privacidade' },
+];
+---
+
+<BaseLayout
+  title="Política de Privacidade - Proteção de Dados e Cookies | ClimaBrasil"
+  description="Conheça a política de privacidade do ClimaBrasil em conformidade com a LGPD (Lei nº 13.709/2018): uso de cookies, armazenamento local e transparência no tratamento de dados."
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <article class="max-w-4xl mx-auto py-6">
+    <div class="mb-8">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-100 text-sky-800 mb-2">
+        Legal & LGPD
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+        Política de Privacidade
+      </h1>
+      <p class="mt-2 text-sm text-slate-500">
+        Última atualização: 03 de Outubro de 2026 • Em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018)
+      </p>
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="privacidade-top" />
+
+    <div class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-xs space-y-6 text-sm text-slate-700 leading-relaxed my-8">
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">1. Introdução e Compromisso com a Privacidade</h2>
+        <p>
+          O <strong>ClimaBrasil</strong> (acessível através do endereço <code>https://climabrasil.com.br</code>) preza pelo respeito absoluto à privacidade e pela segurança dos dados dos usuários que acessam nossos serviços. Esta Política esclarece de forma transparente como as informações são tratadas ao utilizar nossas páginas de previsão do tempo, notícias e ferramentas de utilidade pública.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">2. Dados Pessoais Coletados</h2>
+        <p>
+          O ClimaBrasil <strong>não exige cadastro, criação de conta, e-mail, nome, senha ou número de telefone</strong> para o uso pleno das ferramentas públicas (previsão meteorológica, consulta de CEP, consulta de CNPJ, conversor de moedas e feriados).
+        </p>
+        <p>
+          Não coletamos dados pessoais identificáveis no momento da consulta.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">3. Armazenamento Local no Navegador (LocalStorage)</h2>
+        <p>
+          Para proporcionar uma experiência rápida e conveniente, o portal utiliza o recurso nativo de <strong>armazenamento local (LocalStorage)</strong> do seu próprio navegador exclusivamente para:
+        </p>
+        <ul class="list-disc list-inside space-y-1.5 pl-2 text-slate-600">
+          <li>Salvar o histórico das últimas cidades pesquisadas por você (chave <code>climabrasil_recent_cities</code>), facilitando consultas futuras sem necessidade de redigitar;</li>
+          <li>Armazenar preferências técnicas de interface.</li>
+        </ul>
+        <p>
+          Esses dados permanecem única e exclusivamente no dispositivo do usuário e jamais são enviados para servidores centrais. O usuário pode limpá-los a qualquer momento excluindo o histórico e dados de navegação do seu browser.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">4. Comunicação com APIs e Serviços de Terceiros</h2>
+        <p>
+          Ao utilizar ferramentas interativas, seu navegador pode disparar requisições diretas ou intermediadas a webservices públicos para obtenção dos dados requeridos:
+        </p>
+        <ul class="list-disc list-inside space-y-1.5 pl-2 text-slate-600">
+          <li><strong>Open-Meteo:</strong> Consulta de coordenadas de latitude/longitude e modelos meteorológicos;</li>
+          <li><strong>ViaCEP:</strong> Busca de endereços pelo número do CEP digitado;</li>
+          <li><strong>BrasilAPI:</strong> Consulta de dados cadastrais públicos de CNPJ e calendário de feriados;</li>
+          <li><strong>AwesomeAPI:</strong> Cotações de câmbio comercial.</li>
+        </ul>
+        <p>
+          Essas requisições contêm unicamente os parâmetros necessários para a busca solicitada (ex.: o CEP ou código de moeda) e não contêm qualquer identificador pessoal seu.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">5. Cookies e Tecnologias de Métricas (Google Analytics)</h2>
+        <p>
+          O portal está preparado para integrar ferramentas de análise de audiência anônima (como o <strong>Google Analytics 4</strong>), com a finalidade exclusiva de mensurar métricas estatísticas de visitação (número de visualizações, tempo médio de permanência, tipo de dispositivo e páginas mais acessadas) visando melhorias constantes de usabilidade.
+        </p>
+        <p>
+          O Google Analytics utiliza cookies próprios para distinguir usuários e gerar relatórios anônimos. O usuário pode desativar o rastreamento do Google Analytics instalando a extensão oficial de desativação (<a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer" class="text-sky-600 underline">Google Analytics Opt-out</a>).
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">6. Publicidade e Google AdSense</h2>
+        <p>
+          O ClimaBrasil prepara a veiculação de anúncios publicitários por meio da rede <strong>Google AdSense</strong> para financiar os custos de infraestrutura e manter os serviços 100% gratuitos para a população.
+        </p>
+        <p>
+          O Google, como fornecedor de terceiros, utiliza cookies (como o cookie DoubleClick DART) para exibir anúncios aos usuários com base em visitas anteriores a este ou a outros sites na internet. Os usuários podem optar por desativar a publicidade personalizada acessando as <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" class="text-sky-600 underline">Configurações de Anúncios do Google</a>.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">7. Direitos do Titular (LGPD)</h2>
+        <p>
+          Nos termos do artigo 18 da LGPD (Lei Federal nº 13.709/2018), todo cidadão tem direito à confirmação da existência de tratamento, acesso e correção de eventuais dados. Uma vez que o ClimaBrasil não armazena bancos de dados pessoais dos visitantes comuns, qualquer interação está sob pleno controle do usuário via limpeza dos dados do navegador.
+        </p>
+      </section>
+
+      <section class="space-y-3">
+        <h2 class="text-xl font-bold text-slate-900">8. Contato do Encarregado de Proteção de Dados (DPO)</h2>
+        <p>
+          Para esclarecimento de dúvidas sobre esta Política de Privacidade ou solicitações relativas ao tratamento de dados, entre em contato através do e-mail: <a href="mailto:privacidade@climabrasil.com.br" class="text-sky-600 font-semibold underline">privacidade@climabrasil.com.br</a>.
+        </p>
+      </section>
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="privacidade-bottom" />
+  </article>
+</BaseLayout>

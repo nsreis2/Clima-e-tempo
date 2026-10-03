@@ -1,0 +1,165 @@
+---
+import type { WeatherData } from '../services/weather/types';
+import { formatTemp, formatWind, formatRain, formatPercent } from '../services/weather/formatters';
+
+export interface Props {
+  weather: WeatherData;
+  showExtended?: boolean;
+}
+
+const { weather, showExtended = true } = Astro.props;
+const current = weather.current;
+const today = weather.today;
+---
+
+<div class="bg-gradient-to-br from-white via-sky-50/40 to-blue-50/60 rounded-3xl p-6 sm:p-8 border border-sky-100 shadow-sm relative overflow-hidden">
+  <!-- Subtle decorative climate glow in background -->
+  <div class="absolute -right-16 -top-16 w-56 h-56 bg-sky-300/20 rounded-full blur-3xl pointer-events-none"></div>
+
+  <!-- Header: City & status -->
+  <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+    <div>
+      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-sky-100/80 text-sky-800 mb-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        Tempo agora
+      </span>
+      <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+        {weather.cityName}, {weather.stateUf}
+      </h2>
+      <p class="text-xs text-slate-500 mt-0.5">
+        Atualizado às {weather.lastUpdated} • Fonte: {weather.dataSource}
+      </p>
+    </div>
+    <div class="text-right">
+      <span class="text-xs font-medium text-slate-500 block">Variação hoje</span>
+      <span class="text-sm font-semibold text-slate-700">
+        ↓ {today.minTemp}°C &nbsp;•&nbsp; ↑ {today.maxTemp}°C
+      </span>
+    </div>
+  </div>
+
+  <!-- Main Temperature & Condition Display -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-6 py-4 border-y border-slate-200/60">
+    <div class="flex items-center gap-5">
+      <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-sky-500/10 text-sky-600 flex items-center justify-center shrink-0">
+        <!-- Weather condition SVG icon -->
+        {current.weatherCode <= 1 && (
+          <svg class="w-10 h-10 sm:w-12 sm:h-12 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+          </svg>
+        )}
+        {current.weatherCode >= 2 && current.weatherCode <= 3 && (
+          <svg class="w-10 h-10 sm:w-12 sm:h-12 text-sky-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+          </svg>
+        )}
+        {current.weatherCode >= 51 && current.weatherCode <= 67 && (
+          <svg class="w-10 h-10 sm:w-12 sm:h-12 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+            <path d="M16 14v6M8 14v6M12 16v6"></path>
+          </svg>
+        )}
+        {current.weatherCode >= 80 && (
+          <svg class="w-10 h-10 sm:w-12 sm:h-12 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"></path>
+            <polyline points="13 11 9 17 15 17 11 23"></polyline>
+          </svg>
+        )}
+      </div>
+      <div>
+        <div class="flex items-baseline">
+          <span class="text-5xl sm:text-6xl font-black text-slate-900 tracking-tighter">
+            {formatTemp(current.temperature)}
+          </span>
+        </div>
+        <p class="text-base sm:text-lg font-semibold text-slate-700 mt-1 capitalize">
+          {current.conditionText}
+        </p>
+      </div>
+    </div>
+
+    <!-- Thermal Sensation & Rain chance quick badges -->
+    <div class="flex flex-col gap-2 sm:text-right">
+      <div class="text-sm text-slate-600">
+        Sensação térmica: <strong class="text-slate-900">{formatTemp(current.apparentTemperature)}</strong>
+      </div>
+      <div class="text-sm text-slate-600">
+        Probabilidade de chuva: <strong class="text-sky-700">{formatPercent(today.precipitationProbability)}</strong>
+      </div>
+      {today.precipitationSum > 0 && (
+        <div class="text-xs text-sky-600">
+          Acumulado previsto: <strong>{formatRain(today.precipitationSum)}</strong>
+        </div>
+      )}
+    </div>
+  </div>
+
+  <!-- Key Weather Indicators Grid -->
+  {showExtended && (
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-6">
+      <!-- Chuva / Precipitação -->
+      <div class="bg-white/80 backdrop-blur-xs p-3.5 rounded-2xl border border-slate-200/80">
+        <span class="text-xs text-slate-500 font-medium block">Precipitação</span>
+        <div class="flex items-center gap-1.5 mt-1">
+          <svg class="w-4 h-4 text-sky-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+          </svg>
+          <span class="text-base font-bold text-slate-800">
+            {formatRain(current.precipitation)}
+          </span>
+        </div>
+        <span class="text-[11px] text-slate-500 mt-0.5 block">{today.precipitationProbability}% de chance</span>
+      </div>
+
+      <!-- Umidade Relativa -->
+      <div class="bg-white/80 backdrop-blur-xs p-3.5 rounded-2xl border border-slate-200/80">
+        <span class="text-xs text-slate-500 font-medium block">Umidade</span>
+        <div class="flex items-center gap-1.5 mt-1">
+          <svg class="w-4 h-4 text-cyan-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.09 3 12.25c0 2.22 1.8 4.05 4 4.05z"></path>
+          </svg>
+          <span class="text-base font-bold text-slate-800">
+            {formatPercent(current.relativeHumidity)}
+          </span>
+        </div>
+        <span class="text-[11px] text-slate-500 mt-0.5 block">
+          {current.relativeHumidity < 30 ? 'Muito baixa (atenção)' : current.relativeHumidity > 80 ? 'Elevada' : 'Confortável'}
+        </span>
+      </div>
+
+      <!-- Vento -->
+      <div class="bg-white/80 backdrop-blur-xs p-3.5 rounded-2xl border border-slate-200/80">
+        <span class="text-xs text-slate-500 font-medium block">Vento</span>
+        <div class="flex items-center gap-1.5 mt-1">
+          <svg class="w-4 h-4 text-teal-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2M9.6 4.6A2 2 0 1 1 11 8H2M12.6 19.4A2 2 0 1 0 14 16H2"></path>
+          </svg>
+          <span class="text-base font-bold text-slate-800">
+            {formatWind(current.windSpeed)}
+          </span>
+        </div>
+        <span class="text-[11px] text-slate-500 mt-0.5 block">
+          Direção: {current.windDirectionCardinal}
+        </span>
+      </div>
+
+      <!-- Índice UV e Sol -->
+      <div class="bg-white/80 backdrop-blur-xs p-3.5 rounded-2xl border border-slate-200/80">
+        <span class="text-xs text-slate-500 font-medium block">Índice UV</span>
+        <div class="flex items-center gap-1.5 mt-1">
+          <svg class="w-4 h-4 text-amber-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"></path>
+          </svg>
+          <span class="text-base font-bold text-slate-800">
+            {current.uvIndex} <span class="text-xs font-normal text-slate-500">/ 11</span>
+          </span>
+        </div>
+        <span class="text-[11px] text-slate-500 mt-0.5 block">
+          {current.uvIndex >= 8 ? 'Muito alto' : current.uvIndex >= 6 ? 'Alto' : current.uvIndex >= 3 ? 'Moderado' : 'Baixo'}
+        </span>
+      </div>
+    </div>
+  )}
+</div>

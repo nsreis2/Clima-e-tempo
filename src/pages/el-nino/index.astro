@@ -1,0 +1,201 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdPlaceholder from '../../components/AdPlaceholder.astro';
+import { EL_NINO_OVERVIEW, REGIONAL_IMPACTS, HISTORICAL_EVENTS } from '../../data/elNino';
+
+const breadcrumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'El Niño / La Niña', url: '/el-nino' },
+];
+---
+
+<BaseLayout
+  title="El Niño e La Niña - Monitoramento, Impactos e Previsões para o Brasil"
+  description="Entenda o que são El Niño e La Niña, como afetam as chuvas e temperaturas em cada região do Brasil, histórico de eventos e fontes oficiais de monitoramento."
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <article class="max-w-5xl mx-auto py-6">
+    <!-- Header -->
+    <div class="mb-8">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-semibold mb-3">
+        <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+        Monitoramento Oceânico-Atmosférico
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+        El Niño e La Niña: Monitoramento e Impactos no Brasil
+      </h1>
+      <p class="mt-2 text-base text-slate-600 leading-relaxed max-w-3xl">
+        Acompanhe a situação atual dos fenômenos ENOS (El Niño-Oscilação Sul) e entenda como as variações de temperatura no Oceano Pacífico afetam diretamente o clima em todas as regiões brasileiras.
+      </p>
+    </div>
+
+    <!-- Situação Atual -->
+    <section class="bg-gradient-to-r from-blue-900 via-sky-900 to-indigo-950 rounded-3xl p-6 sm:p-10 text-white mb-10 shadow-md">
+      <div class="flex flex-wrap items-center gap-3 mb-4">
+        <span class="px-3.5 py-1.5 rounded-full bg-sky-500/20 text-sky-200 border border-sky-400/30 text-xs font-bold uppercase tracking-wider">
+          Situação Atual
+        </span>
+        <span class="text-xs text-sky-300">Atualização: {EL_NINO_OVERVIEW.lastUpdate}</span>
+      </div>
+      <h2 class="text-2xl font-bold mb-2">
+        Fase: {EL_NINO_OVERVIEW.currentPhase}
+      </h2>
+      <p class="text-sm text-slate-200 leading-relaxed max-w-3xl mb-4">
+        {EL_NINO_OVERVIEW.summary}
+      </p>
+      <div class="flex flex-wrap items-center gap-3 text-xs text-sky-200">
+        <span>Período de monitoramento: <strong class="text-white">{EL_NINO_OVERVIEW.monitoringPeriod}</strong></span>
+      </div>
+    </section>
+
+    <AdPlaceholder slotType="horizontal" slotId="elnino-top" />
+
+    <!-- O que é El Niño -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs mb-8">
+      <h2 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <span class="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center text-sm font-black">☀</span>
+        O que é El Niño?
+      </h2>
+      <div class="text-sm text-slate-700 leading-relaxed space-y-3">
+        <p>
+          O <strong>El Niño</strong> é um fenômeno climático natural caracterizado pelo aquecimento anormal das águas superficiais do Oceano Pacífico Equatorial, especialmente na região entre a costa ocidental da América do Sul e a Oceania. Esse aquecimento altera significativamente os padrões de circulação atmosférica global, afetando regimes de chuva, ventos e temperatura em todos os continentes — um processo conhecido como <em>teleconexão atmosférica</em>.
+        </p>
+        <p>
+          No Brasil, o El Niño geralmente provoca <strong>excesso de chuvas no Sul</strong> (com risco de enchentes e temporais severos), <strong>estiagem no Norte e Nordeste</strong> (comprometendo reservatórios e colheitas), e <strong>ondas de calor mais intensas no Sudeste e Centro-Oeste</strong>. A magnitude desses efeitos depende da intensidade do aquecimento: episódios classificados como "Super El Niño" (anomalia acima de +2°C) causam impactos dramáticos.
+        </p>
+        <p>
+          Historicamente, os episódios de El Niño ocorrem a cada 2 a 7 anos e podem durar entre 9 e 12 meses. Os eventos mais recentes e marcantes aconteceram em <strong>2015-2016</strong> (apelidado de "El Niño Godzilla") e <strong>2023-2024</strong> (Super El Niño com recorde de temperatura global), que culminou na catástrofe climática do Rio Grande do Sul em maio de 2024.
+        </p>
+      </div>
+    </section>
+
+    <!-- O que é La Niña -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs mb-8">
+      <h2 class="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <span class="w-8 h-8 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center text-sm font-black">❄</span>
+        O que é La Niña?
+      </h2>
+      <div class="text-sm text-slate-700 leading-relaxed space-y-3">
+        <p>
+          A <strong>La Niña</strong> é o fenômeno oposto: consiste no resfriamento anormal das águas superficiais do Pacífico Equatorial. Ela intensifica os ventos alísios de leste, que empurram a água quente para o oeste (em direção à Oceania), deixando águas mais frias emergirem próximo à América do Sul (ressurgência).
+        </p>
+        <p>
+          Para o Brasil, a La Niña costuma trazer <strong>estiagem no Sul</strong> (prejudicando safras de soja, milho e trigo), <strong>chuvas acima da média no Norte e Nordeste</strong> (com recarga de açudes e rios), e formação mais frequente da <strong>Zona de Convergência do Atlântico Sul (ZCAS)</strong> no Sudeste, podendo causar longos períodos de chuva contínua em Minas Gerais, Rio de Janeiro e São Paulo.
+        </p>
+        <p>
+          A La Niña pode ocorrer em sequência ("dupla" ou até "tripla"), como aconteceu entre <strong>2020 e 2023</strong>, quando três anos consecutivos de resfriamento provocaram perdas agrícolas severas no Sul do Brasil e na Argentina. Eventos consecutivos dificultam a previsão sazonal e amplificam os impactos acumulados no setor energético e no abastecimento de água.
+        </p>
+      </div>
+    </section>
+
+    <!-- Impactos Regionais -->
+    <section class="mb-10">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">
+        Impactos Regionais no Brasil
+      </h2>
+      <p class="text-sm text-slate-600 mb-6">
+        Cada região brasileira responde de forma diferente aos fenômenos ENOS. Abaixo, os efeitos típicos observados durante episódios de El Niño e La Niña:
+      </p>
+
+      <div class="space-y-6">
+        {(() => {
+          const regions = [...new Set(REGIONAL_IMPACTS.map((i) => i.region))];
+          return regions.map((region) => {
+            const impacts = REGIONAL_IMPACTS.filter((i) => i.region === region);
+            return (
+              <div class="bg-white rounded-2xl border border-slate-200/80 overflow-hidden">
+                <div class="bg-slate-50 px-5 py-3 border-b border-slate-200">
+                  <h3 class="font-bold text-slate-900">{region}</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-200">
+                  {impacts.map((impact) => (
+                    <div class="p-5">
+                      <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold mb-2 ${
+                        impact.phenomenon === 'El Niño'
+                          ? 'bg-rose-100 text-rose-800'
+                          : 'bg-cyan-100 text-cyan-800'
+                      }`}>
+                        {impact.phenomenon}
+                      </span>
+                      <div class="space-y-1.5 text-xs text-slate-700">
+                        <div>
+                          <span class="font-semibold text-slate-500">Temperatura:</span> {impact.temperatureTrend}
+                        </div>
+                        <div>
+                          <span class="font-semibold text-slate-500">Chuvas:</span> {impact.rainfallTrend}
+                        </div>
+                        <p class="text-slate-600 mt-2 leading-relaxed">{impact.details}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          });
+        })()}
+      </div>
+    </section>
+
+    <AdPlaceholder slotType="in-article" slotId="elnino-mid" />
+
+    <!-- Histórico de Eventos -->
+    <section class="mb-10">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">
+        Histórico de Eventos Marcantes
+      </h2>
+      <div class="space-y-4">
+        {HISTORICAL_EVENTS.map((event) => (
+          <div class="flex gap-4 items-start bg-white rounded-2xl p-5 border border-slate-200/80 shadow-xs">
+            <div class="shrink-0 w-24 text-center">
+              <span class="inline-block px-3 py-1.5 rounded-lg bg-indigo-50 border border-indigo-200 text-indigo-900 text-xs font-bold">
+                {event.period}
+              </span>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm">{event.event}</h3>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">{event.consequences}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Fontes Oficiais -->
+    <section class="mb-10">
+      <h2 class="text-2xl font-bold text-slate-900 mb-4">
+        Fontes Oficiais de Monitoramento
+      </h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {EL_NINO_OVERVIEW.officialSources.map((source) => (
+          <a
+            href={source.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-3 p-4 bg-white rounded-2xl border border-slate-200 hover:border-sky-300 hover:shadow-xs transition-all group"
+          >
+            <div class="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center group-hover:bg-sky-600 group-hover:text-white transition-colors shrink-0">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+            </div>
+            <div>
+              <span class="text-sm font-bold text-slate-900 group-hover:text-sky-600 transition-colors">{source.name}</span>
+              <span class="text-[11px] text-slate-400 block">{source.url}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <div class="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 leading-relaxed">
+      <strong>Aviso Importante:</strong> O ClimaBrasil não produz previsões climáticas sazonais próprias. Todo o conteúdo desta seção é baseado em boletins e análises publicados pelos órgãos oficiais listados acima. Para decisões que envolvam segurança pessoal, agropecuária, gestão hídrica ou energia, consulte sempre as fontes primárias e os serviços de extensão e defesa civil do seu estado.
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="elnino-bottom" />
+  </article>
+</BaseLayout>

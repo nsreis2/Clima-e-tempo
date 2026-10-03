@@ -1,0 +1,97 @@
+---
+import type { DailyForecastItem } from '../services/weather/types';
+import { formatDateBR } from '../services/weather/formatters';
+
+export interface Props {
+  daily: DailyForecastItem[];
+}
+
+const { daily } = Astro.props;
+---
+
+<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h3 class="text-lg sm:text-xl font-bold text-slate-900">
+        Previsão dos Próximos 7 Dias
+      </h3>
+      <p class="text-xs text-slate-500 mt-0.5">
+        Tendência climática diária com temperaturas extremas e probabilidade de chuva
+      </p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
+    {daily.map((item, index) => {
+      const isToday = index === 0;
+      return (
+        <div
+          class={`flex flex-col justify-between p-4 rounded-2xl border transition-all text-center ${
+            isToday
+              ? 'bg-sky-50/70 border-sky-200 shadow-xs'
+              : 'bg-slate-50/60 border-slate-200/60 hover:border-slate-300'
+          }`}
+        >
+          <!-- Dia -->
+          <div>
+            <span class={`text-sm font-bold block ${isToday ? 'text-sky-800' : 'text-slate-800'}`}>
+              {item.dayOfWeek}
+            </span>
+            <span class="text-[11px] text-slate-400 font-medium">
+              {formatDateBR(item.date).slice(0, 5)}
+            </span>
+          </div>
+
+          <!-- Ícone do clima -->
+          <div class="my-3 flex justify-center text-sky-600">
+            {item.weatherCode <= 1 && (
+              <svg class="w-8 h-8 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5"></circle>
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+              </svg>
+            )}
+            {item.weatherCode >= 2 && item.weatherCode <= 3 && (
+              <svg class="w-8 h-8 text-slate-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+              </svg>
+            )}
+            {item.weatherCode >= 51 && item.weatherCode <= 67 && (
+              <svg class="w-8 h-8 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+                <path d="M16 14v6M8 14v6M12 16v6"></path>
+              </svg>
+            )}
+            {item.weatherCode >= 80 && (
+              <svg class="w-8 h-8 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 16.9A5 5 0 0 0 18 7h-1.26a8 8 0 1 0-11.62 9"></path>
+                <polyline points="13 11 9 17 15 17 11 23"></polyline>
+              </svg>
+            )}
+          </div>
+
+          <!-- Condição textual curta -->
+          <p class="text-xs font-medium text-slate-600 mb-3 line-clamp-1" title={item.conditionText}>
+            {item.conditionText}
+          </p>
+
+          <!-- Chuva chance -->
+          <div class="mb-3">
+            <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-sky-700 bg-sky-100/80 px-2 py-0.5 rounded-full">
+              <svg class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+              </svg>
+              {item.precipitationProbability}%
+            </span>
+          </div>
+
+          <!-- Mínima e Máxima -->
+          <div class="flex items-center justify-center gap-2 pt-2 border-t border-slate-200/60 text-xs font-bold">
+            <span class="text-blue-600">↓ {item.minTemp}°</span>
+            <span class="text-slate-300">•</span>
+            <span class="text-rose-600">↑ {item.maxTemp}°</span>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</div>

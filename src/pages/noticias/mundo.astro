@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdPlaceholder from '../../components/AdPlaceholder.astro';
+import { getNewsByCategory } from '../../data/news';
+
+const mundoNews = getNewsByCategory('mundo');
+
+const breadcrumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Notícias', url: '/noticias' },
+  { name: 'Mundo', url: '/noticias/mundo' },
+];
+---
+
+<BaseLayout
+  title="Notícias Mundiais - Clima Global e Sustentabilidade"
+  description="Notícias internacionais sobre acordos climáticos globais, pesquisas atmosféricas, conferências internacionais e eventos climáticos pelo mundo."
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <section class="max-w-7xl mx-auto py-6">
+    <div class="pb-6 border-b border-slate-200">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-800 mb-2">
+        Categoria Editorial
+      </span>
+      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+        Notícias do Mundo
+      </h1>
+      <p class="mt-2 text-base text-slate-600">
+        Panorama internacional sobre sustentabilidade, COP, acordos multilaterais e clima global.
+      </p>
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="noticias-mundo-top" />
+
+    <div class="my-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {mundoNews.map((news) => (
+        <NewsCard news={news} />
+      ))}
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="noticias-mundo-bottom" />
+  </section>
+</BaseLayout>

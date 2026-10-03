@@ -1,0 +1,190 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AdPlaceholder from '../../components/AdPlaceholder.astro';
+import { ACTIVE_ALERTS, EMERGENCY_CONTACTS } from '../../data/alerts';
+
+const breadcrumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Alertas Meteorológicos', url: '/alertas' },
+];
+
+const severityBadge = {
+  yellow: {
+    bg: 'bg-amber-100 text-amber-900 border-amber-300',
+    dot: 'bg-amber-500',
+    titleColor: 'text-amber-950',
+    label: 'Perigo Potencial (Grau Amarelo)',
+  },
+  orange: {
+    bg: 'bg-orange-100 text-orange-950 border-orange-300',
+    dot: 'bg-orange-600',
+    titleColor: 'text-orange-950',
+    label: 'Perigo (Grau Laranja)',
+  },
+  red: {
+    bg: 'bg-rose-100 text-rose-950 border-rose-300',
+    dot: 'bg-rose-600',
+    titleColor: 'text-rose-950',
+    label: 'Grande Perigo (Grau Vermelho)',
+  },
+};
+---
+
+<BaseLayout
+  title="Alertas e Avisos Meteorológicos Oficiais no Brasil"
+  description="Consulte os avisos meteorológicos em vigor no Brasil: declínio de temperatura, tempestades, ventos fortes, baixa umidade e orientações da Defesa Civil."
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <section class="max-w-4xl mx-auto py-6">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold mb-3">
+      <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+      Monitoramento Contínuo de Risco
+    </div>
+
+    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+      Avisos e Alertas Meteorológicos
+    </h1>
+    <p class="mt-2 text-base text-slate-600">
+      Boletins meteorológicos oficiais com foco em segurança da população, mitigação de riscos e orientações preventivas dos órgãos competentes.
+    </p>
+
+    <!-- Contatos de Emergência em Destaque -->
+    <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+      {EMERGENCY_CONTACTS.map((c) => (
+        <div class="bg-white p-3.5 rounded-2xl border border-slate-200 text-center shadow-xs">
+          <span class="text-xs font-semibold text-slate-500 block">{c.name}</span>
+          <span class="text-2xl font-black text-rose-600 block my-0.5">{c.number}</span>
+          <span class="text-[11px] text-slate-400 block line-clamp-1">{c.desc}</span>
+        </div>
+      ))}
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="alertas-top" />
+
+    <!-- Lista de Avisos Ativos -->
+    <div class="mt-8 space-y-6">
+      <h2 class="text-xl font-bold text-slate-900">
+        Avisos Vigentes nas Últimas Horas
+      </h2>
+
+      {ACTIVE_ALERTS.map((alert) => {
+        const badge = severityBadge[alert.severity];
+        return (
+          <article class="bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-8 shadow-xs">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <span class={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border ${badge.bg}`}>
+                <span class={`w-2 h-2 rounded-full ${badge.dot}`}></span>
+                {badge.label}
+              </span>
+              <div class="text-xs text-slate-500">
+                Vigência: <strong>{alert.startDate}</strong> até <strong>{alert.endDate}</strong>
+              </div>
+            </div>
+
+            <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-2">
+              {alert.title}
+            </h3>
+
+            <p class="text-sm text-slate-700 leading-relaxed mb-4">
+              {alert.description}
+            </p>
+
+            <!-- Estados e Regiões afetadas -->
+            <div class="mb-4">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block mb-1.5">
+                Regiões & Estados Abrangidos:
+              </span>
+              <div class="flex flex-wrap gap-1.5">
+                {alert.states.map((st) => (
+                  <span class="px-2.5 py-0.5 rounded-md bg-slate-100 font-bold text-xs text-slate-800">
+                    {st}
+                  </span>
+                ))}
+                {alert.affectedRegions.map((reg) => (
+                  <span class="px-2.5 py-0.5 rounded-md bg-slate-50 border border-slate-200 text-xs text-slate-600">
+                    {reg}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <!-- Riscos e Recomendações -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 pt-4 border-t border-slate-100 text-xs">
+              <div class="bg-rose-50/50 p-4 rounded-2xl border border-rose-100">
+                <h4 class="font-bold text-rose-900 mb-2 flex items-center gap-1.5">
+                  <svg class="w-4 h-4 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                  Riscos Potenciais:
+                </h4>
+                <ul class="space-y-1.5 list-disc list-inside text-rose-800">
+                  {alert.risks.map((r) => (
+                    <li>{r}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div class="bg-emerald-50/50 p-4 rounded-2xl border border-emerald-100">
+                <h4 class="font-bold text-emerald-900 mb-2 flex items-center gap-1.5">
+                  <svg class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                  Recomendações da Defesa Civil:
+                </h4>
+                <ul class="space-y-1.5 list-disc list-inside text-emerald-800">
+                  {alert.recommendations.map((rec) => (
+                    <li>{rec}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+              <span>Fonte: <strong>{alert.source}</strong></span>
+              <a href={alert.sourceUrl} target="_blank" rel="noopener noreferrer" class="text-sky-600 hover:underline">
+                Acessar boletim original no INMET ↗
+              </a>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+
+    <!-- Escala de Cores e Classificação dos Avisos -->
+    <section class="mt-12 bg-slate-100/70 rounded-3xl p-6 sm:p-8">
+      <h2 class="text-lg font-bold text-slate-900 mb-2">
+        Entenda os Níveis de Severidade Meteorológica
+      </h2>
+      <p class="text-xs text-slate-600 mb-4">
+        O sistema de alertas adota o padrão internacional de cores da Organização Meteorológica Mundial e do INMET:
+      </p>
+
+      <div class="space-y-3 text-xs">
+        <div class="flex items-start gap-3 p-3 bg-white rounded-xl border border-slate-200">
+          <span class="px-2.5 py-1 rounded-md bg-amber-100 text-amber-900 font-bold shrink-0">Amarelo</span>
+          <div>
+            <strong class="text-slate-900">Perigo Potencial:</strong> Situação meteorológica perigosa. Mantenha-se informado sobre as condições meteorológicas previstas e não corra riscos desnecessários.
+          </div>
+        </div>
+        <div class="flex items-start gap-3 p-3 bg-white rounded-xl border border-slate-200">
+          <span class="px-2.5 py-1 rounded-md bg-orange-100 text-orange-900 font-bold shrink-0">Laranja</span>
+          <div>
+            <strong class="text-slate-900">Perigo:</strong> Situação meteorológica perigosa de intensidade moderada a forte. Mantenha-se muito vigilante e informe-se regularmente sobre as condições meteorológicas detalhadas. Siga as orientações das autoridades.
+          </div>
+        </div>
+        <div class="flex items-start gap-3 p-3 bg-white rounded-xl border border-slate-200">
+          <span class="px-2.5 py-1 rounded-md bg-rose-100 text-rose-900 font-bold shrink-0">Vermelho</span>
+          <div>
+            <strong class="text-slate-900">Grande Perigo:</strong> Situação meteorológica de intensidade extraordinária. Há grande probabilidade de ocorrência de grandes danos e acidentes, com possíveis riscos para a integridade física ou mesmo a vida humana.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <AdPlaceholder slotType="horizontal" slotId="alertas-bottom" />
+  </section>
+</BaseLayout>

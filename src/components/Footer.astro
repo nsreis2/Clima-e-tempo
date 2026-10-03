@@ -1,0 +1,103 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-slate-900 text-slate-300 mt-16 border-t border-slate-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Coluna 1: Sobre o Portal -->
+      <div class="md:col-span-1 space-y-3">
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-lg bg-sky-500 flex items-center justify-center text-white font-bold">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+            </svg>
+          </span>
+          <span class="text-xl font-bold tracking-tight text-white">
+            Clima<span class="text-sky-400">Brasil</span>
+          </span>
+        </div>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          Portal independente focado em previsão do tempo em tempo real, boletins climáticos, monitoramento de fenômenos como El Niño/La Niña e ferramentas de utilidade pública gratuitas.
+        </p>
+        <p class="text-xs text-slate-500">
+          Dados abertos, atualizados e sem burocracia para todo o território nacional.
+        </p>
+      </div>
+
+      <!-- Coluna 2: Navegação Meteorológica -->
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-200 mb-3">
+          Meteorologia & Notícias
+        </h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/clima" class="hover:text-white transition-colors">Previsão do Tempo</a></li>
+          <li><a href="/clima/sao-paulo-sp" class="hover:text-white transition-colors">Previsão em São Paulo</a></li>
+          <li><a href="/clima/rio-de-janeiro-rj" class="hover:text-white transition-colors">Previsão no Rio de Janeiro</a></li>
+          <li><a href="/clima/porto-alegre-rs" class="hover:text-white transition-colors">Previsão em Porto Alegre</a></li>
+          <li><a href="/alertas" class="hover:text-white transition-colors">Avisos Meteorológicos</a></li>
+          <li><a href="/el-nino" class="hover:text-white transition-colors">Especial El Niño / La Niña</a></li>
+          <li><a href="/noticias" class="hover:text-white transition-colors">Notícias Climáticas</a></li>
+        </ul>
+      </div>
+
+      <!-- Coluna 3: Ferramentas Gratuitas -->
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-200 mb-3">
+          Ferramentas Gratuitas
+        </h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/ferramentas/cep" class="hover:text-white transition-colors">Consulta de CEP (ViaCEP)</a></li>
+          <li><a href="/ferramentas/cnpj" class="hover:text-white transition-colors">Consulta de CNPJ</a></li>
+          <li><a href="/ferramentas/moedas" class="hover:text-white transition-colors">Conversor de Moedas</a></li>
+          <li><a href="/ferramentas/feriados" class="hover:text-white transition-colors">Calendário de Feriados</a></li>
+          <li><a href="/ferramentas" class="hover:text-white transition-colors">Todas as Ferramentas</a></li>
+        </ul>
+      </div>
+
+      <!-- Coluna 4: Institucional & Legal -->
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-slate-200 mb-3">
+          Institucional & Legal
+        </h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="/sobre" class="hover:text-white transition-colors">Sobre o Portal</a></li>
+          <li><a href="/contato" class="hover:text-white transition-colors">Fale Conosco</a></li>
+          <li><a href="/politica-de-privacidade" class="hover:text-white transition-colors">Política de Privacidade</a></li>
+          <li><a href="/termos-de-uso" class="hover:text-white transition-colors">Termos de Uso</a></li>
+        </ul>
+        <div class="mt-4 pt-4 border-t border-slate-800">
+          <p class="text-xs text-slate-400">
+            <strong>Emergência Climática:</strong><br />
+            Defesa Civil: <strong>199</strong> | Bombeiros: <strong>193</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Divisória de Fontes de Dados e Copyright -->
+    <div class="mt-10 pt-8 border-t border-slate-800 text-xs text-slate-500 space-y-3">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <p>
+          &copy; {currentYear} ClimaBrasil. Todos os direitos reservados.
+        </p>
+        <div class="flex items-center gap-3">
+          <span>Fontes de dados:</span>
+          <span class="text-slate-400">Open-Meteo</span>
+          <span>•</span>
+          <span class="text-slate-400">INMET</span>
+          <span>•</span>
+          <span class="text-slate-400">BrasilAPI</span>
+          <span>•</span>
+          <span class="text-slate-400">ViaCEP</span>
+          <span>•</span>
+          <span class="text-slate-400">AwesomeAPI</span>
+        </div>
+      </div>
+      <p class="text-[11px] text-slate-500 leading-relaxed">
+        Aviso: As previsões meteorológicas e cotações financeiras são disponibilizadas como ferramentas de referência informativa, oriundas de modelos numéricos abertos e APIs públicas. Sempre consulte os órgãos oficiais de proteção e defesa civil em situações de emergência climática.
+      </p>
+    </div>
+  </div>
+</footer>

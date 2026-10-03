@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ToolCard from '../../components/ToolCard.astro';
+import AdPlaceholder from '../../components/AdPlaceholder.astro';
+
+const breadcrumbs = [
+  { name: 'Início', url: '/' },
+  { name: 'Ferramentas', url: '/ferramentas' },
+];
+---
+
+<BaseLayout
+  title="Ferramentas Gratuitas de Utilidade Pública"
+  description="Consulte CEP, CNPJ, converta moedas e veja o calendário de feriados nacionais do Brasil — tudo gratuito, sem cadastro e com dados oficiais."
+>
+  <Breadcrumbs items={breadcrumbs} />
+
+  <section class="max-w-5xl mx-auto py-6">
+    <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+      Ferramentas Gratuitas de Utilidade Pública
+    </h1>
+    <p class="mt-2 text-base text-slate-600 mb-8">
+      Serviços rápidos e sem cadastro, alimentados por APIs públicas brasileiras confiáveis.
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <ToolCard
+        title="Consulta de CEP"
+        description="Encontre endereços, logradouros e bairros pelo CEP oficial dos Correios. Resultado instantâneo com opção de copiar."
+        href="/ferramentas/cep"
+        badge="ViaCEP"
+        icon="cep"
+      />
+      <ToolCard
+        title="Consulta de CNPJ"
+        description="Verifique a situação cadastral, razão social, atividade econômica e município de empresas brasileiras."
+        href="/ferramentas/cnpj"
+        badge="BrasilAPI"
+        icon="cnpj"
+      />
+      <ToolCard
+        title="Conversor de Moedas"
+        description="Cotação de referência em tempo real do mercado comercial: Real, Dólar, Euro e Libra Esterlina."
+        href="/ferramentas/moedas"
+        badge="Ao Vivo"
+        icon="currency"
+      />
+      <ToolCard
+        title="Calendário de Feriados"
+        description="Todos os feriados nacionais do Brasil organizados por mês, com dia da semana e tipo do feriado."
+        href="/ferramentas/feriados"
+        badge="2024-2028"
+        icon="calendar"
+      />
+    </div>
+
+    <AdPlaceholder slotType="horizontal" slotId="ferramentas-bottom" />
+  </section>
+</BaseLayout>
